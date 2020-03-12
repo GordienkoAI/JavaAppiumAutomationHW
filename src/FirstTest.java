@@ -11,6 +11,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.security.Key;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FirstTest {
 
@@ -51,42 +54,19 @@ public class FirstTest {
                 5);
 
 
-//        waitForElementAndSendKeys(
-//                By.xpath("//android.widget.EditText[@text='Search Wikipedia']"),
-//                "Java",
-//                "Cannot find element for enter Key",
-//                10);
-
-        inputSearchText("Java");
+        WebElement searchText_element = inputSearchText("Java");
 
 
-        waitForElementAndClick(
-                By.xpath("//android.widget.TextView[@text = 'Object-oriented programming language']"),
-                "Cannot find 'Object-oriented programming language' in Java search",
-                50);
+        List<WebElement> webElementList =  driver.findElements(By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//android.view.ViewGroup"));
 
-        waitForElementAndClick(
-                By.xpath("//android.widget.ImageView[@resource-id ='org.wikipedia:id/article_menu_show_toc']"),
-                "Cannot find menu element",
-                5
-        );
+        int count_list = webElementList.size();
+        Assert.assertTrue("Search count < 2", count_list > 1);
 
-        WebElement title_element =  waitForElementPresent(
-                By.xpath("//*[@text='Java (programming language)']"),
-                "Cannot element for title = 'Java (programming language)'",
-                10);
+        searchText_element.clear();
 
+        boolean searchClear = driver.findElements(By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//android.view.ViewGroup")).isEmpty();
+        Assert.assertTrue("Element List not empty", searchClear);
 
-
-
-
-        String artical_title = title_element.getText();
-
-        Assert.assertEquals(
-                "We see unexpected title",
-                "Java (programming language)",
-                artical_title
-        );
 
     }
 
@@ -104,7 +84,7 @@ public class FirstTest {
         String find_element = element.getText();
 
         Assert.assertEquals(
-                "Finding element not equals 'Search...'",
+                "Finding element not equals 'Search Wikipedia'",
                 "Search Wikipedia",
                 find_element
         );
