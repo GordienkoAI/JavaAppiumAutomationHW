@@ -54,16 +54,32 @@ public class FirstTest {
                 5);
 
 
-        WebElement searchText_element = inputSearchText("Java");
+        String searchText = "Java";
+        WebElement searchText_element = inputSearchText(searchText);
+        WebDriverWait wait = new WebDriverWait(driver, 5);
 
 
-        List<WebElement> webElementList =  driver.findElements(By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//android.view.ViewGroup"));
+        List<WebElement> webElementList =  driver.findElements(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//android.view.ViewGroup"));
+
+//        List<WebElement> webElementsList = waitForListElements(
+//                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//android.view.ViewGroup"),
+//                "Can not find elements",
+//                10
+//        );
 
         int count_list = webElementList.size();
-        Assert.assertTrue("Search count < 2", count_list > 1);
+        Assert.assertTrue("Search count < 1", count_list > 1);
+
+        for (int i = 0; i < count_list; i++)
+        {
+
+            WebElement inner_element  = webElementList.get(i).findElement(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']"));
+            Assert.assertTrue("Element " + i +" not contains "+ searchText, inner_element.getText().contains(searchText));
+        }
+
 
         searchText_element.clear();
-
         boolean searchClear = driver.findElements(By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//android.view.ViewGroup")).isEmpty();
         Assert.assertTrue("Element List not empty", searchClear);
 
@@ -76,6 +92,7 @@ public class FirstTest {
 
     private WebElement inputSearchText(String Keys)
     {
+
         WebElement element = waitForElementPresent(
                 By.xpath("//android.widget.EditText[@text='Search Wikipedia']"),
                 "Cannot find 'Search Wikipedia' line",
@@ -84,7 +101,7 @@ public class FirstTest {
         String find_element = element.getText();
 
         Assert.assertEquals(
-                "Finding element not equals 'Search Wikipedia'",
+                "Cannot find Search Wikipedia",
                 "Search Wikipedia",
                 find_element
         );
@@ -96,12 +113,22 @@ public class FirstTest {
     //--------------------------------------------------------------------------------------------------------------
 
 
+    private List<WebElement> waitForListElements(By by, String error_message, long timeoutInSeconds)
+    {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + "\n");
+        List<WebElement> webElementList =  driver.findElements(by);
+        return webElementList;
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds)
     {
         WebDriverWait wait =  new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
         return wait.until(ExpectedConditions.presenceOfElementLocated(by));
     }
+
+
 
     private WebElement waitForElementPresent(By by, String error_message)
     {
