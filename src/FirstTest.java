@@ -32,13 +32,13 @@ public class FirstTest {
         capabilities.setCapability("platformVersion","9");
         capabilities.setCapability("automationName","Appium");
         capabilities.setCapability("appPackage","org.wikipedia");
-        capabilities.setCapability("appWaitActivity",".onboarding.InitialOnboardingActivity");
+ //       capabilities.setCapability("appWaitActivity",".onboarding.InitialOnboardingActivity");
         capabilities.setCapability("appActivity",".main.MainActivity");
         capabilities.setCapability("app","C:\\Users\\gordienko_ani\\Desktop\\JavaAppiumAutomation\\apks\\org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-        WebElement button = driver.findElementByXPath("//android.widget.TextView[@text = 'SKIP']");
-        button.click();
+//        WebElement button = driver.findElementByXPath("//android.widget.TextView[@text = 'SKIP']");
+//        button.click();
     }
 
     @After
@@ -157,7 +157,7 @@ public class FirstTest {
         );
     }
 
-    //-----------------------------------Ex5: Тест: сохранение двух статей--------------------------------------------
+    //---------------------------------------------------------------------------------------------------------------
     @Test
     public void compareSrticleTitle()
     {
@@ -173,11 +173,6 @@ public class FirstTest {
         List<WebElement> webElementList =  driver.findElements(
                 By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//android.view.ViewGroup"));
 
-//        List<WebElement> webElementsList = waitForListElements(
-//                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//android.view.ViewGroup"),
-//                "Can not find elements",
-//                10
-//        );
 
         int count_list = webElementList.size();
         Assert.assertTrue("Search count < 1", count_list > 1);
@@ -194,7 +189,29 @@ public class FirstTest {
 
     }
 
+    //------------------------------------Ex6:  Тест: assert title----------------------------------------------------
+    @Test
+    public void assertTitle()
+    {
+        WebElement search_element =   waitForElementAndClick(
+                 By.xpath("//android.widget.TextView[@text='Search Wikipedia']"),
+                "Cannot find search first input element",
+                5);
 
+        String searchText = "Java";
+        WebElement searchText_element = inputSearchText(searchText);
+
+        WebElement element = waitForElementAndClick(
+                By.xpath("//*[@text = 'Java (programming language)']"),
+                "Cannot find articel 'Java (programming language)'",
+                10
+        );
+
+        assertElementPresent(element);
+
+
+    }
+    //----------------------------------------------------------------------------------------------------------------
     @Test
     public void saveFirstArticleToMyList()
     {
@@ -465,15 +482,15 @@ public class FirstTest {
     {
 
         WebElement element = waitForElementPresent(
-                By.xpath("//android.widget.EditText[@text='Search Wikipedia']"),
-                "Cannot find 'Search Wikipedia' line",
+                By.xpath("//*[@text='Search…']"),
+                "Cannot find 'Search…' line",
                 5);
 
         String find_element = element.getText();
 
         Assert.assertEquals(
-                "Cannot find Search Wikipedia",
-                "Search Wikipedia",
+                "Search…",
+                "Search…",
                 find_element
         );
 
@@ -602,5 +619,14 @@ public class FirstTest {
     {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSecond);
         return element.getAttribute(attribute);
+    }
+
+
+    private void assertElementPresent(WebElement element)
+    {
+        String title = element.getText();
+        if (title.isEmpty()){
+            throw new AssertionError("Element " + element.toString() + " not contain attribute 'title'");
+        }
     }
 }
