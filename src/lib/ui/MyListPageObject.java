@@ -6,8 +6,8 @@ import org.openqa.selenium.By;
 public class MyListPageObject extends MainPageObject {
 
     private static String
-            FOLDER_NAME_TPL = "//*[@text='{SUBSTRING}']",
-            ARTICLE_NAME_IN_MY_LIST_TPL = "//*[@text = '{SUBSTRING}']";
+            FOLDER_NAME_TPL = "xpath://*[@text='{SUBSTRING}']",
+            ARTICLE_NAME_IN_MY_LIST_TPL = "xpath://*[@text = '{SUBSTRING}']";
 
     public MyListPageObject(AppiumDriver driver)
     {
@@ -28,7 +28,7 @@ public class MyListPageObject extends MainPageObject {
     {
         String name_of_folder_xpath = getXpathNameFolder(folder_name);
         this.waitForElementAndClick(
-                By.xpath(name_of_folder_xpath),
+                name_of_folder_xpath,
                 "Cannot find my list = '" + folder_name +"'",
                 5);
     }
@@ -38,7 +38,7 @@ public class MyListPageObject extends MainPageObject {
         this.waitForArticleToAppearByTitle(article_title);
         String name_article_xpath = getXpathArticleInFolder(article_title);
         this.swipeElementToLeft(
-                By.xpath(name_article_xpath),
+                name_article_xpath,
                 "Cannot find in list '"+ article_title+"' element");
         this.waitForArticleToDisappearByTitle(article_title);
     }
@@ -46,7 +46,7 @@ public class MyListPageObject extends MainPageObject {
     public void waitForArticleToDisappearByTitle(String article_title) {
         String name_article_xpath = getXpathArticleInFolder(article_title);
         this.waitElementNotPresent(
-                By.xpath(name_article_xpath),
+                name_article_xpath,
                 "This article '" + article_title + "' present in list",
                 5
         );
@@ -56,7 +56,7 @@ public class MyListPageObject extends MainPageObject {
     {
             String name_article_xpath = getXpathArticleInFolder(article_title);
             this.waitForElementPresent(
-                    By.xpath(name_article_xpath),
+                    name_article_xpath,
                     "Cannot find save article'" + article_title + "' present in list",
                     5
             );

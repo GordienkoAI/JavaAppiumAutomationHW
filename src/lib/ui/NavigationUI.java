@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 public class NavigationUI extends MainPageObject {
 
     private static String
-        MY_LIST_NAVIGATE_BUTTON = "//*[@content-desc = 'My lists']";
+        MY_LIST_NAVIGATE_BUTTON = "xpath://*[@content-desc = 'My lists']";
 
     public NavigationUI(AppiumDriver driver)
     {
@@ -17,7 +17,7 @@ public class NavigationUI extends MainPageObject {
     public void clickMyList()
     {
         this.waitForElementAndClick(
-                By.xpath(MY_LIST_NAVIGATE_BUTTON),
+                MY_LIST_NAVIGATE_BUTTON,
                 "Cannot find 'My lists' element",
                 5);
     }
