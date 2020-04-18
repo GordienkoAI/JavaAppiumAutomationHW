@@ -1,13 +1,13 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
+import lib.Platform;
 
-public class MyListPageObject extends MainPageObject {
+abstract public class MyListPageObject extends MainPageObject {
 
-    private static String
-            FOLDER_NAME_TPL = "xpath://*[@text='{SUBSTRING}']",
-            ARTICLE_NAME_IN_MY_LIST_TPL = "xpath://*[@text = '{SUBSTRING}']";
+    protected static String
+            FOLDER_NAME_TPL,
+            ARTICLE_NAME_IN_MY_LIST_TPL;
 
     public MyListPageObject(AppiumDriver driver)
     {
@@ -40,8 +40,15 @@ public class MyListPageObject extends MainPageObject {
         this.swipeElementToLeft(
                 name_article_xpath,
                 "Cannot find in list '"+ article_title+"' element");
+
+        if(Platform.getInstance().isIOS()){
+            this.clickElementToTheRightUpperCorner(name_article_xpath, "Cannot find saved article");
+        }
+
         this.waitForArticleToDisappearByTitle(article_title);
     }
+
+
 
     public void waitForArticleToDisappearByTitle(String article_title) {
         String name_article_xpath = getXpathArticleInFolder(article_title);

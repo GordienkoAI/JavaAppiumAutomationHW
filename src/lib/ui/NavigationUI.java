@@ -4,10 +4,10 @@ import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class NavigationUI extends MainPageObject {
+abstract public class NavigationUI extends MainPageObject {
 
-    private static String
-        MY_LIST_NAVIGATE_BUTTON = "xpath://*[@content-desc = 'My lists']";
+    protected static String
+        MY_LIST_NAVIGATE_BUTTON;
 
     public NavigationUI(AppiumDriver driver)
     {
